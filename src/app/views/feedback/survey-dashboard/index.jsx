@@ -12,6 +12,9 @@ import DowndownMenu from '../../../components/DropdownMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSurveyAnswers, getSurvey, getAnswersBy } from '../../../redux/actions/SurveyActions';
 
+import dayjs from 'dayjs';
+import { add } from 'date-fns';
+
 const options = [
   { label: 'Copy survey public link', value: 'public_link' },
   { label: 'Change survey status', value: 'status' },
@@ -43,6 +46,19 @@ const Survey = ({ match }) => {
     dispatch(getAnswersBy(value));
     setFilter(value);
   }
+
+  // Enfoque
+
+  console.log(survey?.duration);
+  console.log(survey?.created_at);
+
+  const expires = add(new Date(survey?.created_at), {
+    hours: parseInt(survey?.duration)
+  });
+
+  console.log(expires);
+
+  // ^ Enfoque
 
   return (
     <div className="analytics m-sm-30">
@@ -77,10 +93,11 @@ const Survey = ({ match }) => {
           </Button>
         </DowndownMenu>
       </div>
-        {answered && answered.length > 0 ? <Grid container spacing={2}>
+        {/* {answered && answered.length > 0 ? <Grid container spacing={2}> */}
+        <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
-              <AlertTitle className="m-auto">{survey && survey.expires < 0 ? "This survey expired": `This survey expires in ${survey.expires} hours`}</AlertTitle>
+              <AlertTitle className="m-auto">{survey && survey?.created_at < survey?.created_at ? "This survey expired": `This survey expires in ${survey?.duration} hours`}</AlertTitle>
             </Alert>
             <GaugeProgressCard score={overallScore} />
             <Grid container spacing={2}>
@@ -128,7 +145,7 @@ const Survey = ({ match }) => {
             mentors={mentors}/>
           </Grid>
         </Grid>
-        }
+        {/* } */}
       </>
       }
     </div>

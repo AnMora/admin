@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { addHours } from 'date-fns'
+import { addHours } from 'date-fns';
 import { Breadcrumb } from '../../../matx';
 import bc from 'app/services/breathecode';
 import {SmartMUIDataTable} from '../../components/SmartDataTable';
