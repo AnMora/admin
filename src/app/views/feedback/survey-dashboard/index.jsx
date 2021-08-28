@@ -48,17 +48,18 @@ const Survey = ({ match }) => {
   }
 
   // Enfoque
-
+  // tiempo creado
   console.log(dayjs(survey?.created_at).format('HH:mm:ss'));
+  // tiempo duracion
   console.log(survey?.duration);
-  console.log(survey?.status);
+  // tiempo real
+  console.log(dayjs(survey?.datetime).format('HH:mm:ss'));
 
   const expires = addHours(new Date(dayjs(survey?.created_at)), parseInt(survey?.duration));
-
-  console.log(dayjs(survey?.datetime));
-
+  // tiempo finalizacion
   console.log(dayjs(expires).format('HH:mm:ss'));
 
+  const fromNow = dayjs(survey?.created_at).fromNow();
   // ^ Enfoque
 
   return (
@@ -100,7 +101,7 @@ const Survey = ({ match }) => {
             <Alert severity="warning" className="mb-3">
               <AlertTitle className="m-auto">
                 {expires <= dayjs(survey?.datetime) ?
-                  `This survey expired ${dayjs(survey?.created_at).fromNow()}`
+                  `This survey expired ${fromNow}`
                 : 
                   `This survey expires in ${survey?.duration} hours`
                 }
