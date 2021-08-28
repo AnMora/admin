@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSurveyAnswers, getSurvey, getAnswersBy } from '../../../redux/actions/SurveyActions';
 
 import dayjs from 'dayjs';
-import { add } from 'date-fns';
+import { add, addHours } from 'date-fns';
 
 const options = [
   { label: 'Copy survey public link', value: 'public_link' },
@@ -53,9 +53,7 @@ const Survey = ({ match }) => {
   console.log(survey?.duration);
   console.log(survey?.status);
 
-  const expires = add(new Date(survey?.created_at), {
-    hours: parseInt(survey?.duration)
-  });
+  const expires = addHours(new Date(dayjs(survey?.created_at)), parseInt(survey?.duration));
 
   console.log(dayjs(survey?.datetime));
 
@@ -101,7 +99,7 @@ const Survey = ({ match }) => {
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
               <AlertTitle className="m-auto">
-                {expires >= dayjs(survey?.datetime) ?
+                {expires <= dayjs(survey?.datetime) ?
                   `This survey expired ${dayjs(survey?.created_at).fromNow()}`
                 : 
                   `This survey expires in ${survey?.duration} hours`
