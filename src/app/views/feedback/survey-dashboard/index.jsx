@@ -48,18 +48,29 @@ const Survey = ({ match }) => {
   }
 
   // Enfoque
+  
   // tiempo creado
-  console.log(dayjs(survey?.created_at).format('HH:mm:ss'));
+  console.log(dayjs(survey?.created_at));
   // tiempo duracion
   console.log(survey?.duration);
   // tiempo real
-  console.log(dayjs(survey?.datetime).format('HH:mm:ss'));
+  console.log(dayjs(survey?.datetime));
 
-  const expires = addHours(new Date(dayjs(survey?.created_at)), parseInt(survey?.duration));
+  // const expires = addHours(new Date(dayjs(survey?.created_at)), parseInt(survey?.duration));
+  const expires = add(new Date(dayjs(survey?.created_at)), {
+    years: 0,
+    months: 0,
+    weeks: 0,
+    days: parseInt(survey?.duration),
+    hours: parseInt(survey?.duration),
+    minutes: parseInt(survey?.duration),
+    seconds: parseInt(survey?.duration),
+  })
   // tiempo finalizacion
-  console.log(dayjs(expires).format('HH:mm:ss'));
+  console.log(dayjs(expires));
 
   const fromNow = dayjs(survey?.created_at).fromNow();
+
   // ^ Enfoque
 
   return (
@@ -100,10 +111,10 @@ const Survey = ({ match }) => {
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
               <AlertTitle className="m-auto">
-                {expires <= dayjs(survey?.datetime) ?
+                {expires >= dayjs(survey.datetime) ?
                   `This survey expired ${fromNow}`
                 : 
-                  `This survey expires in ${survey?.duration} hours`
+                  `This survey expires in ${survey.duration} hours`
                 }
               </AlertTitle>
             </Alert>
@@ -125,6 +136,7 @@ const Survey = ({ match }) => {
           <Grid item md={8} xs={12}>
             <Answers answered={answered} filteredAnswers={filteredAnswers} sortBy={sortBy} filter={filter} mentors={mentors}/>
           </Grid>
+          {/* </Grid>   */}
         </Grid>:<Grid container spacing={2}>
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
@@ -153,7 +165,7 @@ const Survey = ({ match }) => {
             mentors={mentors}/>
           </Grid>
         </Grid>
-        {/* } */}
+      {/* } */}
       </>
       }
     </div>
