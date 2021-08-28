@@ -49,14 +49,17 @@ const Survey = ({ match }) => {
 
   // Enfoque
 
+  console.log(dayjs(survey?.created_at).format('HH:mm:ss'));
   console.log(survey?.duration);
-  console.log(survey?.created_at);
+  console.log(survey?.status);
 
   const expires = add(new Date(survey?.created_at), {
     hours: parseInt(survey?.duration)
   });
 
-  console.log(expires);
+  console.log(dayjs(survey?.datetime));
+
+  console.log(dayjs(expires).format('HH:mm:ss'));
 
   // ^ Enfoque
 
@@ -97,7 +100,13 @@ const Survey = ({ match }) => {
         <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
-              <AlertTitle className="m-auto">{survey && survey?.created_at < survey?.created_at ? "This survey expired": `This survey expires in ${survey?.duration} hours`}</AlertTitle>
+              <AlertTitle className="m-auto">
+                {expires >= dayjs(survey?.datetime) ?
+                  `This survey expired ${dayjs(survey?.created_at).fromNow()}`
+                : 
+                  `This survey expires in ${survey?.duration} hours`
+                }
+              </AlertTitle>
             </Alert>
             <GaugeProgressCard score={overallScore} />
             <Grid container spacing={2}>
