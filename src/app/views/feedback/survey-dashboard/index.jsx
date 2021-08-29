@@ -12,9 +12,6 @@ import DowndownMenu from '../../../components/DropdownMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSurveyAnswers, getSurvey, getAnswersBy } from '../../../redux/actions/SurveyActions';
 
-import dayjs from 'dayjs';
-import { add, addHours } from 'date-fns';
-
 const options = [
   { label: 'Copy survey public link', value: 'public_link' },
   { label: 'Change survey status', value: 'status' },
@@ -46,32 +43,6 @@ const Survey = ({ match }) => {
     dispatch(getAnswersBy(value));
     setFilter(value);
   }
-
-  // Enfoque
-  
-  // tiempo creado
-  console.log(dayjs(survey?.created_at));
-  // tiempo duracion
-  console.log(survey?.duration);
-  // tiempo real
-  console.log(dayjs(survey?.datetime));
-
-  // const expires = addHours(new Date(dayjs(survey?.created_at)), parseInt(survey?.duration));
-  const expires = add(new Date(dayjs(survey?.created_at)), {
-    years: 0,
-    months: 0,
-    weeks: 0,
-    days: parseInt(survey?.duration),
-    hours: parseInt(survey?.duration),
-    minutes: parseInt(survey?.duration),
-    seconds: parseInt(survey?.duration),
-  })
-  // tiempo finalizacion
-  console.log(dayjs(expires));
-
-  const fromNow = dayjs(survey?.created_at).fromNow();
-
-  // ^ Enfoque
 
   return (
     <div className="analytics m-sm-30">
@@ -106,17 +77,10 @@ const Survey = ({ match }) => {
           </Button>
         </DowndownMenu>
       </div>
-        {/* {answered && answered.length > 0 ? <Grid container spacing={2}> */}
-        <Grid container spacing={2}>
+        {answered && answered.length > 0 ? <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
-              <AlertTitle className="m-auto">
-                {expires >= dayjs(survey.datetime) ?
-                  `This survey expired ${fromNow}`
-                : 
-                  `This survey expires in ${survey.duration} hours`
-                }
-              </AlertTitle>
+              <AlertTitle className="m-auto">{survey && survey.expires < 0 ? "This survey expired": `This survey expires in ${survey.expires} hours`}</AlertTitle>
             </Alert>
             <GaugeProgressCard score={overallScore} />
             <Grid container spacing={2}>
@@ -136,7 +100,6 @@ const Survey = ({ match }) => {
           <Grid item md={8} xs={12}>
             <Answers answered={answered} filteredAnswers={filteredAnswers} sortBy={sortBy} filter={filter} mentors={mentors}/>
           </Grid>
-          {/* </Grid>   */}
         </Grid>:<Grid container spacing={2}>
           <Grid item md={4} xs={12}>
             <Alert severity="warning" className="mb-3">
@@ -165,7 +128,7 @@ const Survey = ({ match }) => {
             mentors={mentors}/>
           </Grid>
         </Grid>
-      {/* } */}
+        }
       </>
       }
     </div>
